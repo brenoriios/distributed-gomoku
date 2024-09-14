@@ -1,29 +1,38 @@
 import java.rmi.RemoteException;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 public class Gomoku implements IGomoku{
     private final String[][] board = new String[width][height];
+    private boolean gameStarted = false;
     private Player playerOne;
     private Player playerTwo;
-    private Player currentPlayer;
+    private String currentPlayer;
+    private String winner;
 
     public Gomoku() throws RemoteException {
         this.createBoard();
     }
 
     @Override
-    public void enterGame(String name) throws RemoteException {
-        Player newPlayer = new Player(name);
+    public Player enterGame(String name) throws RemoteException {
+        if (this.gameStarted) return null;
+
+        String id = UUID.randomUUID().toString();
+        Player newPlayer = new Player(id, name);
 
         if(playerOne == null){
+            newPlayer.setPieceColor(Env.pieceBlack);
             this.playerOne = newPlayer;
-            this.playerOne.setPieceColor(Env.pieceBlack);
-            return;
+        } else {
+            newPlayer.setPieceColor(Env.pieceWhite);
+            this.playerTwo = newPlayer;
         }
 
-        this.playerTwo = newPlayer;
-        this.playerTwo.setPieceColor(Env.pieceWhite);
+        this.startGame();
+
+        return newPlayer;
     }
 
     @Override
@@ -36,28 +45,36 @@ public class Gomoku implements IGomoku{
     }
 
     @Override
-    public boolean startGame() throws RemoteException {
+    public void startGame() throws RemoteException {
         if (playerOne == null || playerTwo == null){
-            return true;
+            return;
         }
+
+        this.gameStarted = true;
 
         Random rand = new Random();
         int coinFlip = rand.nextInt(2);
 
         if (coinFlip == 0){
-            this.currentPlayer = playerOne;
-            return true;
+            this.currentPlayer = playerOne.getId();
+            return;
         }
 
-        this.currentPlayer = playerTwo;
-        return true;
+        this.currentPlayer = playerTwo.getId();
     }
 
     @Override
-    public boolean placePiece(int x, int y) throws RemoteException {
+    public boolean gameStarted() throws RemoteException {
+        return this.gameStarted;
+    }
+
+    @Override
+    public boolean placePiece(Player player, int x, int y) throws RemoteException {
+        if (!Objects.equals(player.getId(), this.currentPlayer)) return false;
         if (!checkValidPosition(x, y)) return false;
 
-        this.board[x][y] = " " + this.currentPlayer.getPieceColor() + " ";
+        System.out.println("Jogador " + player.getId() + " fez sua jogada");
+        this.board[x][y] = " " + player.getPieceColor() + " ";
         this.switchPlayer();
 
         return true;
@@ -65,16 +82,16 @@ public class Gomoku implements IGomoku{
 
     @Override
     public void switchPlayer() throws RemoteException {
-        if(currentPlayer == playerOne){
-            currentPlayer = playerTwo;
+        if(Objects.equals(currentPlayer, playerOne.getId())){
+            currentPlayer = playerTwo.getId();
             return;
         }
 
-        currentPlayer = playerOne;
+        currentPlayer = playerOne.getId();
     }
 
     @Override
-    public Player getCurrentPlayer() throws RemoteException {
+    public String getCurrentPlayer() throws RemoteException {
         return this.currentPlayer;
     }
 
@@ -85,6 +102,20 @@ public class Gomoku implements IGomoku{
 
     @Override
     public boolean checkValidPosition(int x, int y) throws RemoteException {
-        return Objects.equals(this.board[x][y], " E ");
+        return true;
+//        return Objects.equals(this.board[x][y], " E ");
+    }
+
+    @Override
+    public String getWinner() throws RemoteException {
+        return this.winner;
+    }
+
+    @Override
+    public void destroy() throws RemoteException {
+        this.gameStarted = false;
+        this.playerOne = null;
+        this.playerTwo = null;
+        this.winner = null;
     }
 }

@@ -1,7 +1,12 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 
 public class Client {
+   static Player player;
+
    private Client() { }
 
    public static void main(String[] args) {
@@ -11,23 +16,43 @@ public class Client {
          Registry registry = LocateRegistry.getRegistry(host);
          IGomoku stub = (IGomoku)registry.lookup(Env.serverName);
 
-         stub.enterGame("P1");
-         stub.enterGame("P2");
+         player = stub.enterGame(new Date().toString());
 
-         stub.createBoard();
-         stub.startGame();
+         while (!stub.gameStarted()){
+            System.out.println("Aguardando início do jogo");
+         }
 
-         printBoard(stub.getBoard());
-         Player p = stub.getCurrentPlayer();
-         System.out.println(p.getName());
-
-         stub.placePiece(5, 5);
-         printBoard(stub.getBoard());
-         System.out.println(stub.getCurrentPlayer().getName());
+         gameLoop(stub);
       } catch (Exception ex) {
          System.err.println("Client exception: " + ex);
          System.err.println("Stack trace: ");
          ex.printStackTrace();
+      }
+   }
+
+   public static void gameLoop(IGomoku stub) {
+      try {
+         while (true) {
+            while(!Objects.equals(stub.getCurrentPlayer(), player.getId())){
+               System.out.flush();
+               System.out.println("Não é sua vez");
+            }
+
+            printBoard(stub.getBoard());
+            System.out.println("Faça sua jogada: ");
+            String[] coords = System.console().readLine().split(",");
+            int x = Integer.parseInt(coords[0]);
+            int y = Integer.parseInt(coords[1]);
+
+            stub.placePiece(player, x, y);
+
+            if(stub.getWinner() != null){
+               break;
+            }
+         }
+         stub.destroy();
+      } catch (Exception ex) {
+         return;
       }
    }
 

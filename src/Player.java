@@ -1,10 +1,12 @@
 import java.io.Serializable;
 
-public class Player implements Serializable {
+public class Player implements Serializable  {
+    private String id;
     private String name;
     private String pieceColor;
 
-    public Player(String name){
+    public Player(String id, String name){
+        this.id = id;
         this.name = name;
     }
 
@@ -22,5 +24,13 @@ public class Player implements Serializable {
 
     public void setPieceColor(String pieceColor) {
         this.pieceColor = pieceColor;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
