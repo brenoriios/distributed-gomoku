@@ -1,3 +1,5 @@
+import env.Env;
+
 import java.rmi.RemoteException;
 import java.util.Objects;
 import java.util.Random;
@@ -39,7 +41,7 @@ public class Gomoku implements IGomoku{
     public void createBoard() throws RemoteException {
         for (int x = 0; x < this.board.length - 1; x++){
             for (int y = 0; y < this.board[0].length - 1; y++){
-                this.board[x][y] = " " + Env.emptyCell + " ";
+                this.board[x][y] = Env.emptyCell;
             }
         }
     }
@@ -74,9 +76,18 @@ public class Gomoku implements IGomoku{
         if (!checkValidPosition(x, y)) return false;
 
         System.out.println("Jogador " + player.getId() + " fez sua jogada");
-        this.board[x][y] = " " + player.getPieceColor() + " ";
-        this.switchPlayer();
+        this.board[x][y] = player.getPieceColor();
 
+        if (
+            this.scoredOnHorizontal(player, x, y) ||
+            this.scoredOnVertical(player, x, y) ||
+            this.scoredOnDiagonal(player, x, y)
+        ) {
+            this.winner = player.getId();
+            return true;
+        }
+
+        this.switchPlayer();
         return true;
     }
 
@@ -102,8 +113,7 @@ public class Gomoku implements IGomoku{
 
     @Override
     public boolean checkValidPosition(int x, int y) throws RemoteException {
-        return true;
-//        return Objects.equals(this.board[x][y], " E ");
+        return Objects.equals(this.board[x][y], Env.emptyCell);
     }
 
     @Override
@@ -117,5 +127,56 @@ public class Gomoku implements IGomoku{
         this.playerOne = null;
         this.playerTwo = null;
         this.winner = null;
+    }
+
+    @Override
+    public boolean scoredOnHorizontal(Player player, int x, int y) throws RemoteException {
+        int dx = x;
+        // b b b b b
+        while (dx >= 0 && Objects.equals(this.board[dx][y], player.getPieceColor())){
+            dx -= 1;
+        }
+
+        int pieceCount = 0;
+        for(int i = 1; i <= 5; i++){
+            if (!Objects.equals(this.board[dx + i][y], player.getPieceColor())) break;
+            pieceCount++;
+        }
+
+        return pieceCount >= 5;
+    }
+
+    @Override
+    public boolean scoredOnVertical(Player player, int x, int y) throws RemoteException {
+        int dy = y;
+        while (dy >= 0 && Objects.equals(this.board[x][dy], player.getPieceColor())){
+            dy -= 1;
+        }
+
+        int pieceCount = 0;
+        for(int i = 1; i <= 5; i++){
+            if (!Objects.equals(this.board[x][dy + i], player.getPieceColor())) break;
+            pieceCount++;
+        }
+
+        return pieceCount >= 5;
+    }
+
+    @Override
+    public boolean scoredOnDiagonal(Player player, int x, int y) throws RemoteException {
+        int dx = x;
+        int dy = y;
+        while ((dx >= 0 && dy >= 0) && Objects.equals(this.board[dx][dy], player.getPieceColor())){
+            dx -= 1;
+            dy -= 1;
+        }
+
+        int pieceCount = 0;
+        for(int i = 1; i <= 5; i++){
+            if (!Objects.equals(this.board[dx + i][dy + i], player.getPieceColor())) break;
+            pieceCount++;
+        }
+
+        return pieceCount >= 5;
     }
 }

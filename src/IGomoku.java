@@ -21,4 +21,7 @@ public interface IGomoku extends Remote {
     String getWinner() throws RemoteException;
 
     void destroy() throws RemoteException;
+    boolean scoredOnHorizontal(Player player, int x, int y) throws RemoteException;
+    boolean scoredOnVertical(Player player, int x, int y) throws RemoteException;
+    boolean scoredOnDiagonal(Player player, int x, int y) throws RemoteException;
 }
