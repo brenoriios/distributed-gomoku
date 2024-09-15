@@ -21,14 +21,14 @@ public class Board {
     public Board() {
         this.blackPiece = loadImage(Env.blackPiecePath);
         this.whitePiece = loadImage(Env.whitePiecePath);
-        this.btnBackground = loadImage("assets/cross.jpg");
+        this.btnBackground = loadImage("assets/cross.png");
 
         this.boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.boardFrame.setContentPane(new BoardPanel());
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
-                this.buttons[x][y] = new Button(this.whitePiece, this.btnBackground);
+                this.buttons[x][y] = new Button(this.btnBackground);
                 this.boardFrame.getContentPane().add(this.buttons[x][y]);
             }
         }

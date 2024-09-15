@@ -10,8 +10,7 @@ import java.io.IOException;
 
 public class Button extends JButton {
     BufferedImage bg;
-    public Button(BufferedImage icon, BufferedImage bg){
-        super("T");
+    public Button(BufferedImage bg){
 //        setOpaque(false);
         this.bg = bg;
         this.applyStyles();
