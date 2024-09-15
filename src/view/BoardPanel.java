@@ -15,14 +15,14 @@ public class BoardPanel extends JPanel {
         this.backgroundImage = loadImage();
         this.setOpaque(false);
         this.setLayout(new GridLayout(15, 15));
-        this.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+//        this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponents(g);
-        g.drawImage(this.backgroundImage, -25, -25, this.getWidth(), this.getHeight(), this);
-    }
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponents(g);
+//        g.drawImage(this.backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+//    }
 
     private BufferedImage loadImage() {
         try {

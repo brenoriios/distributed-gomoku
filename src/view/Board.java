@@ -13,6 +13,7 @@ import java.util.Objects;
 public class Board {
     public BufferedImage blackPiece;
     public BufferedImage whitePiece;
+    public BufferedImage btnBackground;
 
     JFrame boardFrame = new JFrame("Gomoku");
     public Button[][] buttons = new Button[15][15];
@@ -20,13 +21,14 @@ public class Board {
     public Board() {
         this.blackPiece = loadImage(Env.blackPiecePath);
         this.whitePiece = loadImage(Env.whitePiecePath);
+        this.btnBackground = loadImage("assets/cross.jpg");
 
         this.boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.boardFrame.setContentPane(new BoardPanel());
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
-                this.buttons[x][y] = new Button();
+                this.buttons[x][y] = new Button(this.whitePiece, this.btnBackground);
                 this.boardFrame.getContentPane().add(this.buttons[x][y]);
             }
         }
@@ -45,9 +47,6 @@ public class Board {
                 }
             }
         }
-
-        this.boardFrame.pack();
-        this.boardFrame.setVisible(true);
     }
 
     public void setButtonIcon(String pieceCollor, Button button) {

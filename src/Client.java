@@ -46,7 +46,7 @@ public class Client {
 
          while (true){
             Thread.sleep(1000);
-            board.update(stub.getBoard());
+//            board.update(stub.getBoard());
 
             if (stub.getWinner() != null){
                System.out.println("Vencedor " + stub.getWinner());

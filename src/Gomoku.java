@@ -41,7 +41,7 @@ public class Gomoku implements IGomoku{
     public void createBoard() throws RemoteException {
         for (int x = 0; x < this.board.length - 1; x++){
             for (int y = 0; y < this.board[0].length - 1; y++){
-                this.board[x][y] = Env.emptyCell;
+                this.board[x][y] = Env.pieceBlack;
             }
         }
     }
@@ -81,13 +81,15 @@ public class Gomoku implements IGomoku{
         if (
             this.scoredOnHorizontal(player, x, y) ||
             this.scoredOnVertical(player, x, y) ||
-            this.scoredOnDiagonal(player, x, y)
+            this.scoredOnDiagonalFromLeft(player, x, y) ||
+            this.scoredOnDiagonalFromRight(player, x, y)
         ) {
             this.winner = player.getId();
             return true;
         }
 
         this.switchPlayer();
+        System.out.println("Vez do " + currentPlayer);
         return true;
     }
 
@@ -163,7 +165,7 @@ public class Gomoku implements IGomoku{
     }
 
     @Override
-    public boolean scoredOnDiagonal(Player player, int x, int y) throws RemoteException {
+    public boolean scoredOnDiagonalFromLeft(Player player, int x, int y) throws RemoteException {
         int dx = x;
         int dy = y;
         while ((dx >= 0 && dy >= 0) && Objects.equals(this.board[dx][dy], player.getPieceColor())){
@@ -174,6 +176,24 @@ public class Gomoku implements IGomoku{
         int pieceCount = 0;
         for(int i = 1; i <= 5; i++){
             if (!Objects.equals(this.board[dx + i][dy + i], player.getPieceColor())) break;
+            pieceCount++;
+        }
+
+        return pieceCount >= 5;
+    }
+
+    @Override
+    public boolean scoredOnDiagonalFromRight(Player player, int x, int y) throws RemoteException {
+        int dx = x;
+        int dy = y;
+        while ((dx >= 0 && dy >= 0) && Objects.equals(this.board[dx][dy], player.getPieceColor())){
+            dx += 1;
+            dy += 1;
+        }
+
+        int pieceCount = 0;
+        for(int i = 1; i <= 5; i++){
+            if (!Objects.equals(this.board[dx - i][dy - i], player.getPieceColor())) break;
             pieceCount++;
         }
 
