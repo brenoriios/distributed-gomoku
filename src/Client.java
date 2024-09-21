@@ -1,5 +1,5 @@
 import env.Env;
-import view.Board;
+import view.board.Board;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -46,7 +46,7 @@ public class Client {
 
          while (true){
             Thread.sleep(1000);
-//            board.update(stub.getBoard());
+            board.update(stub.getBoard());
 
             if (stub.getWinner() != null){
                System.out.println("Vencedor " + stub.getWinner());

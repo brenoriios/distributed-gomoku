@@ -1,6 +1,8 @@
-package view;
+package view.board;
 
 import env.Env;
+import view.board.button.Button;
+import view.board.button.PanelButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,15 +23,16 @@ public class Board {
     public Board() {
         this.blackPiece = loadImage(Env.blackPiecePath);
         this.whitePiece = loadImage(Env.whitePiecePath);
-        this.btnBackground = loadImage("assets/cross.png");
+        this.btnBackground = loadImage(Env.cellBackground);
 
         this.boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.boardFrame.setContentPane(new BoardPanel());
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
-                this.buttons[x][y] = new Button(this.btnBackground);
-                this.boardFrame.getContentPane().add(this.buttons[x][y]);
+                PanelButton panelButton = new PanelButton(this.btnBackground, new Dimension(40, 40));
+                this.buttons[x][y] = panelButton.getButton();
+                this.boardFrame.getContentPane().add(panelButton);
             }
         }
 

@@ -41,7 +41,7 @@ public class Gomoku implements IGomoku{
     public void createBoard() throws RemoteException {
         for (int x = 0; x < this.board.length - 1; x++){
             for (int y = 0; y < this.board[0].length - 1; y++){
-                this.board[x][y] = Env.pieceBlack;
+                this.board[x][y] = Env.emptyCell;
             }
         }
     }
