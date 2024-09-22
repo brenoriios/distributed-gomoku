@@ -1,7 +1,8 @@
 package env;
 
 public abstract class Env {
-   public static final String serverName = "Server";
+   public static final String serverName = "engine.Server";
+   public static final String hostAddress = "";
    public static final int serverPort = 1099;
 
    public static final String pieceWhite = " W ";

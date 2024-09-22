@@ -1,3 +1,5 @@
+package engine;
+
 import env.Env;
 
 import java.rmi.RemoteException;
@@ -75,7 +77,7 @@ public class Gomoku implements IGomoku{
         if (!Objects.equals(player.getId(), this.currentPlayer)) return false;
         if (!checkValidPosition(x, y)) return false;
 
-        System.out.println("Jogador " + player.getId() + " fez sua jogada");
+        System.out.println("Jogador " + player.getName() + " fez sua jogada");
         this.board[x][y] = player.getPieceColor();
 
         if (

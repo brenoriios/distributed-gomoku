@@ -12,32 +12,27 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Board {
-    public BufferedImage blackPiece;
-    public BufferedImage whitePiece;
-    public BufferedImage btnBackground;
+public class Board extends JFrame {
+    public final BufferedImage blackPiece = loadImage(Env.blackPiecePath);
+    public final BufferedImage whitePiece = loadImage(Env.whitePiecePath);
+    public final BufferedImage btnBackground = loadImage(Env.cellBackground);
 
-    JFrame boardFrame = new JFrame("Gomoku");
-    public Button[][] buttons = new Button[15][15];
+    private final Button[][] buttons = new Button[15][15];
 
     public Board() {
-        this.blackPiece = loadImage(Env.blackPiecePath);
-        this.whitePiece = loadImage(Env.whitePiecePath);
-        this.btnBackground = loadImage(Env.cellBackground);
-
-        this.boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.boardFrame.setContentPane(new BoardPanel());
+        this.setTitle("Gomoku");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setContentPane(new BoardPanel());
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
                 PanelButton panelButton = new PanelButton(this.btnBackground, new Dimension(40, 40));
                 this.buttons[x][y] = panelButton.getButton();
-                this.boardFrame.getContentPane().add(panelButton);
+                this.getContentPane().add(panelButton);
             }
         }
 
-        this.boardFrame.pack();
-        this.boardFrame.setVisible(true);
+        this.pack();
     }
 
     public void update(String[][] board){
@@ -70,8 +65,8 @@ public class Board {
         button.setIcon(new ImageIcon(image));
     }
 
-    public void quit(){
-        this.boardFrame.dispatchEvent(new WindowEvent(this.boardFrame, WindowEvent.WINDOW_CLOSING));
+    public Button[][] getButtons(){
+        return this.buttons;
     }
 
     private BufferedImage loadImage(String imagePath) {
@@ -80,5 +75,12 @@ public class Board {
         } catch (IOException e) {
             return null;
         }
+    }
+}
+
+class BoardPanel extends JPanel {
+    public BoardPanel(){
+        this.setLayout(new GridLayout(15, 15));
+        this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 }
