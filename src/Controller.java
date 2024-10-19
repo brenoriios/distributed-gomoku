@@ -66,10 +66,11 @@ public class Controller {
     }
 
     public void updateBoard(){
-        if (!Objects.equals(this.model.getWinner(), ""))  {
-            System.out.println("Acabou");
+        String winner = this.model.getWinner();
+        System.out.println(winner);
+        if (!Objects.equals(winner, ""))  {
+//            this.view.showWinner(winner);
             this.updater.interrupt();
-            System.exit(0);
             return;
         }
 

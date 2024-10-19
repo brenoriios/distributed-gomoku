@@ -86,7 +86,7 @@ public class Gomoku implements IGomoku{
             this.scoredOnDiagonalFromLeft(player, x, y) ||
             this.scoredOnDiagonalFromRight(player, x, y)
         ) {
-            this.winner = player.getId();
+            this.winner = player.getName();
             return true;
         }
 

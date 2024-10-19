@@ -6,32 +6,41 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WinnerScreen extends JFrame {
-    private JLabel winner;
-    private final JPanel content;
+    private final JLabel winner;
 
     public WinnerScreen() {
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(Env.customFont);
+
         WinnerScreenContentPane contentPane = new WinnerScreenContentPane();
         contentPane.setLayout(new GridBagLayout());
         this.setContentPane(contentPane);
         this.setMinimumSize(new Dimension(500, 500));
 
-        this.content = new JPanel();
-        this.content.setBackground(new Color(255, 255, 255));
-        this.content.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(new Color(255, 255, 255, 220));
+        content.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
-        this.winner = new JLabel("Breno Rios", SwingConstants.CENTER);
+        JLabel title = new JLabel("FIM DE JOGO", SwingConstants.CENTER);
+        title.setBorder(BorderFactory.createEmptyBorder(0,0,30,0));
+        title.setFont(new Font("Orbitron", Font.BOLD, 48));
+        JLabel label = new JLabel("Vencedor:", SwingConstants.CENTER);
+        label.setFont(new Font("Orbitron", Font.PLAIN, 24));
+        this.winner = new JLabel("", SwingConstants.CENTER);
+        this.winner.setFont(new Font("Orbitron", Font.PLAIN, 36));
 
+        content.add(title);
+        content.add(label);
         content.add(this.winner);
 
         contentPane.add(content);
 
         this.pack();
-        this.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        WinnerScreen t = new WinnerScreen();
-        t.setVisible(true);
+    public void setVisible(boolean b, String winnerName) {
+        this.winner.setText(winnerName);
+        super.setVisible(b);
     }
 }
 

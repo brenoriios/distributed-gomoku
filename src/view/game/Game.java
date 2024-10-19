@@ -4,6 +4,7 @@ import engine.Player;
 import view.game.board.Board;
 import view.game.topbar.Topbar;
 import javax.swing.*;
+import java.awt.*;
 
 public class Game extends JFrame {
     public Player player;

@@ -5,24 +5,18 @@ import env.Env;
 import utils.Utils;
 import view.game.button.Button;
 import view.game.button.PanelButton;
-import view.game.topbar.Topbar;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Objects;
 
 public class Board extends JPanel {
-//    public final BufferedImage blackPiece = Utils.loadImage(Env.blackPiecePath);
-//    public final BufferedImage whitePiece = Utils.loadImage(Env.whitePiecePath);
-//    public final BufferedImage btnBackground = Utils.loadImage(Env.cellBackgroundPath);
-
     private final Button[][] buttons = new Button[15][15];
 
     public Board() {
         this.setLayout(new GridLayout(15, 15));
+        this.setBackground(Color.black);
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
@@ -33,11 +27,11 @@ public class Board extends JPanel {
         }
     }
 
-    public void updateBoard(String[][] board){
+    public void updateBoard(String[][] board) {
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
                 Button button = this.buttons[x][y];
-                if (!Objects.equals(button.getText(), board[x][y])){
+                if (!Objects.equals(button.getText(), board[x][y])) {
                     setButtonIcon(board[x][y], button);
                     button.repaint();
                 }
@@ -48,22 +42,28 @@ public class Board extends JPanel {
     public void setButtonIcon(String pieceColor, Button button) {
         BufferedImage image = null;
 
-        if(Objects.equals(pieceColor, Env.pieceBlack)) {
+        if (Objects.equals(pieceColor, Env.pieceBlack)) {
             image = Env.blackPiece;
         }
 
-        if(Objects.equals(pieceColor, Env.pieceWhite)) {
+        if (Objects.equals(pieceColor, Env.pieceWhite)) {
             image = Env.whitePiece;
         }
 
-        if(image == null || Objects.equals(pieceColor, Env.emptyCell)) {
+        if (image == null || Objects.equals(pieceColor, Env.emptyCell)) {
             return;
         }
 
         button.setIcon(new ImageIcon(image));
     }
 
-    public Button[][] getButtons(){
+    public Button[][] getButtons() {
         return this.buttons;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(Env.menuBg, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 }

@@ -1,6 +1,7 @@
 package view;
 
 import engine.Player;
+import view.endgame.WinnerScreen;
 import view.game.Game;
 import view.menu.Menu;
 
@@ -9,10 +10,12 @@ import javax.swing.*;
 public class GUI extends JFrame {
     private final Menu menu;
     private final Game game;
+    private final WinnerScreen endGame;
 
     public GUI(){
         this.menu = new Menu();
         this.game = new Game();
+        this.endGame = new WinnerScreen();
     }
 
     public void init(){
@@ -30,6 +33,11 @@ public class GUI extends JFrame {
         this.menu.setVisible(false);
         this.game.setPlayers(playerOne, playerTwo);
         this.game.setVisible(true);
+    }
+
+    public void showWinner(String winner){
+        this.game.setVisible(false);
+        this.endGame.setVisible(true, winner);
     }
 
     public Menu getMenu(){
