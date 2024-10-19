@@ -2,6 +2,7 @@ package view.game.topbar;
 
 import engine.Player;
 import env.Env;
+import utils.Utils;
 import view.game.topbar.playercard.PlayerCard;
 
 import javax.imageio.ImageIO;
@@ -19,7 +20,7 @@ public class Topbar extends JPanel {
         this.setBackground(Color.black);
 
         JLabel versusImage = new JLabel();
-        versusImage.setIcon(new ImageIcon(loadImage(Env.versusIcon)));
+        versusImage.setIcon(new ImageIcon(Env.versus));
         versusImage.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         this.playerOneCard = new PlayerCard();
         this.playerTwoCard = new PlayerCard();
@@ -30,15 +31,13 @@ public class Topbar extends JPanel {
     }
 
     public Icon getPieceColorResourceImage(String pieceColor){
-        String resourcePath = Env.blackPiecePath;
+        BufferedImage image = Env.blackPiece;
 
         if (Objects.equals(pieceColor, Env.pieceWhite)){
-            resourcePath = Env.whitePiecePath;
+            image = Env.whitePiece;
         }
 
-        BufferedImage img = loadImage(resourcePath);
-
-        return new ImageIcon(img);
+        return new ImageIcon(image);
     }
 
     public void updatePlayers(Player playerOne, Player playerTwo){
@@ -58,13 +57,5 @@ public class Topbar extends JPanel {
 
     public boolean isCurrentPlayer(Player player, String currentPlayer){
         return Objects.equals(player.getId(), currentPlayer);
-    }
-
-    private BufferedImage loadImage(String imagePath) {
-        try {
-            return ImageIO.read(Topbar.class.getResource(imagePath));
-        } catch (IOException e) {
-            return null;
-        }
     }
 }

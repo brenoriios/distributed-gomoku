@@ -20,15 +20,11 @@ public class Controller {
     }
 
     public void setupMenuListeners() {
-        this.view.getMenu().connect.addActionListener(_ -> {
-            this.model.connect(this.view.getMenu().nameInput.getText());
-            boolean gameStarted;
-            do {
-               gameStarted = this.model.isGameStarted();
-            } while (!gameStarted);
-
-            startUpdater();
-            this.view.showBoard(this.model.getPlayer(), this.model.getOpponent());
+        this.view.getMenu().getConnectButton().addActionListener(_ -> {
+            if(this.model.connect(this.view.getMenu().getPlayerName())){
+                this.view.getMenu().next();
+                this.checkGameStartedThread();
+            }
         });
     }
 
@@ -44,7 +40,19 @@ public class Controller {
         }
     }
 
-    public void startUpdater(){
+    public void checkGameStartedThread(){
+        new Thread(() -> {
+            boolean gameStarted;
+            do {
+                gameStarted = this.model.isGameStarted();
+            } while (!gameStarted);
+
+            startUpdaterThread();
+            this.view.showBoard(this.model.getPlayer(), this.model.getOpponent());
+        }).start();
+    }
+
+    public void startUpdaterThread(){
         this.updater = new Thread(() -> {
             try {
                 while (true){

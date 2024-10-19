@@ -14,12 +14,16 @@ public class Client {
 
     public Client() {}
 
-    public void connect(String name){
+    public boolean connect(String name){
           try{
              Registry registry = LocateRegistry.getRegistry(Env.hostAddress);
              this.stub = (IGomoku)registry.lookup(Env.serverName);
              this.player = this.stub.enterGame(name);
+
+             return true;
           } catch (Exception _) {}
+
+          return false;
     }
 
     public String[][] getBoard(){

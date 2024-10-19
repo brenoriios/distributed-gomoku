@@ -2,8 +2,7 @@ package view;
 
 import engine.Player;
 import view.game.Game;
-import view.game.board.Board;
-import view.main.Menu;
+import view.menu.Menu;
 
 import javax.swing.*;
 
@@ -28,6 +27,7 @@ public class GUI extends JFrame {
         if (playerOne == null) playerOne = new Player();
         if (playerTwo == null) playerTwo = new Player();
 
+        this.menu.setVisible(false);
         this.game.setPlayers(playerOne, playerTwo);
         this.game.setVisible(true);
     }

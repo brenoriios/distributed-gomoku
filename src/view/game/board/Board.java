@@ -2,6 +2,7 @@ package view.game.board;
 
 import engine.Player;
 import env.Env;
+import utils.Utils;
 import view.game.button.Button;
 import view.game.button.PanelButton;
 import view.game.topbar.Topbar;
@@ -14,9 +15,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Board extends JPanel {
-    public final BufferedImage blackPiece = loadImage(Env.blackPiecePath);
-    public final BufferedImage whitePiece = loadImage(Env.whitePiecePath);
-    public final BufferedImage btnBackground = loadImage(Env.cellBackground);
+//    public final BufferedImage blackPiece = Utils.loadImage(Env.blackPiecePath);
+//    public final BufferedImage whitePiece = Utils.loadImage(Env.whitePiecePath);
+//    public final BufferedImage btnBackground = Utils.loadImage(Env.cellBackgroundPath);
 
     private final Button[][] buttons = new Button[15][15];
 
@@ -25,7 +26,7 @@ public class Board extends JPanel {
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
-                PanelButton panelButton = new PanelButton(this.btnBackground, new Dimension(40, 40));
+                PanelButton panelButton = new PanelButton(Env.cellBackground, new Dimension(40, 40));
                 this.buttons[x][y] = panelButton.getButton();
                 this.add(panelButton);
             }
@@ -48,11 +49,11 @@ public class Board extends JPanel {
         BufferedImage image = null;
 
         if(Objects.equals(pieceColor, Env.pieceBlack)) {
-            image = this.blackPiece;
+            image = Env.blackPiece;
         }
 
         if(Objects.equals(pieceColor, Env.pieceWhite)) {
-            image = this.whitePiece;
+            image = Env.whitePiece;
         }
 
         if(image == null || Objects.equals(pieceColor, Env.emptyCell)) {
@@ -64,13 +65,5 @@ public class Board extends JPanel {
 
     public Button[][] getButtons(){
         return this.buttons;
-    }
-
-    private BufferedImage loadImage(String imagePath) {
-        try {
-            return ImageIO.read(Board.class.getResource(imagePath));
-        } catch (IOException e) {
-            return null;
-        }
     }
 }
