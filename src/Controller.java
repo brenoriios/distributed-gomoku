@@ -2,24 +2,33 @@ import engine.Client;
 import engine.IGomoku;
 import view.GUI;
 
+import java.util.Objects;
+
 public class Controller {
+    private String currentPlayer;
     private final GUI view;
     private final Client model;
+
+    private Thread updater;
 
     public Controller(GUI view, Client model){
         this.view = view;
         this.model = model;
 
-        setupMenuListeners();
-        setupBoardListeners();
-
-        view.init();
+        this.setupMenuListeners();
+        this.setupBoardListeners();
     }
 
     public void setupMenuListeners() {
-        this.view.getMenu().connect.addActionListener(e -> {
+        this.view.getMenu().connect.addActionListener(_ -> {
             this.model.connect(this.view.getMenu().nameInput.getText());
-            this.view.showBoard();
+            boolean gameStarted;
+            do {
+               gameStarted = this.model.isGameStarted();
+            } while (!gameStarted);
+
+            startUpdater();
+            this.view.showBoard(this.model.getPlayer(), this.model.getOpponent());
         });
     }
 
@@ -28,17 +37,50 @@ public class Controller {
             for(int y = 0; y < IGomoku.height; y++) {
                 int finalX = x;
                 int finalY = y;
-                this.view.getBoard().getButtons()[x][y].addActionListener(e -> {
+                this.view.getGame().getBoard().getButtons()[x][y].addActionListener(_ -> {
                     this.model.placePiece(finalX, finalY);
-                    this.view.getBoard().update(this.model.getBoard());
                 });
             }
         }
+    }
+
+    public void startUpdater(){
+        this.updater = new Thread(() -> {
+            try {
+                while (true){
+                    Thread.sleep(1000);
+                    updateBoard();
+                }
+            } catch(InterruptedException _) {}
+        });
+
+        updater.start();
+    }
+
+    public void updateBoard(){
+        if (!Objects.equals(this.model.getWinner(), ""))  {
+            System.out.println("Acabou");
+            this.updater.interrupt();
+            System.exit(0);
+            return;
+        }
+
+        String newCurrentPlayer = this.model.getCurrentPlayer();
+        if (!Objects.equals(this.currentPlayer, newCurrentPlayer)){
+            this.currentPlayer = newCurrentPlayer;
+            this.view.getGame().updateGame(model.getBoard(), model.getCurrentPlayer());
+        }
+    }
+
+    public void run(){
+        this.view.init();
     }
 
     public static void main(String[] args) {
         GUI ui = new GUI();
         Client cl = new Client();
         Controller ct = new Controller(ui, cl);
+
+        ct.run();
     }
 }

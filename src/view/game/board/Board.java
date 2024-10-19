@@ -1,9 +1,10 @@
-package view.board;
+package view.game.board;
 
+import engine.Player;
 import env.Env;
-import view.board.button.Button;
-import view.board.button.PanelButton;
-import view.board.topbar.Topbar;
+import view.game.button.Button;
+import view.game.button.PanelButton;
+import view.game.topbar.Topbar;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,7 +22,6 @@ public class Board extends JPanel {
 
     public Board() {
         this.setLayout(new GridLayout(15, 15));
-        this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
@@ -32,7 +32,7 @@ public class Board extends JPanel {
         }
     }
 
-    public void update(String[][] board){
+    public void updateBoard(String[][] board){
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
                 Button button = this.buttons[x][y];
@@ -44,18 +44,18 @@ public class Board extends JPanel {
         }
     }
 
-    public void setButtonIcon(String pieceCollor, Button button) {
+    public void setButtonIcon(String pieceColor, Button button) {
         BufferedImage image = null;
 
-        if(Objects.equals(pieceCollor, Env.pieceBlack)) {
+        if(Objects.equals(pieceColor, Env.pieceBlack)) {
             image = this.blackPiece;
         }
 
-        if(Objects.equals(pieceCollor, Env.pieceWhite)) {
+        if(Objects.equals(pieceColor, Env.pieceWhite)) {
             image = this.whitePiece;
         }
 
-        if(image == null || Objects.equals(pieceCollor, Env.emptyCell)) {
+        if(image == null || Objects.equals(pieceColor, Env.emptyCell)) {
             return;
         }
 
@@ -68,21 +68,9 @@ public class Board extends JPanel {
 
     private BufferedImage loadImage(String imagePath) {
         try {
-            return ImageIO.read(ContentPanel.class.getResource(imagePath));
+            return ImageIO.read(Board.class.getResource(imagePath));
         } catch (IOException e) {
             return null;
         }
-    }
-
-    public static void main(String[] args) {
-        Board b = new Board();
-        b.setVisible(true);
-    }
-}
-
-class ContentPanel extends JPanel {
-    public ContentPanel(){
-        this.setLayout(new GridLayout(15, 15));
-        this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 }

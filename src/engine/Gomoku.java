@@ -13,7 +13,7 @@ public class Gomoku implements IGomoku{
     private Player playerOne;
     private Player playerTwo;
     private String currentPlayer;
-    private String winner;
+    private String winner = "";
 
     public Gomoku() throws RemoteException {
         this.createBoard();
@@ -68,7 +68,7 @@ public class Gomoku implements IGomoku{
     }
 
     @Override
-    public boolean gameStarted() throws RemoteException {
+    public boolean isGameStarted() throws RemoteException {
         return this.gameStarted;
     }
 
@@ -103,6 +103,13 @@ public class Gomoku implements IGomoku{
         }
 
         currentPlayer = playerOne.getId();
+    }
+
+    @Override
+    public Player getOpponent(String playerId) throws RemoteException {
+        if (Objects.equals(this.playerOne.getId(), playerId)) return this.playerTwo;
+
+        return this.playerOne;
     }
 
     @Override

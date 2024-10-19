@@ -1,18 +1,19 @@
 package view;
 
-import engine.Client;
-import view.board.Board;
+import engine.Player;
+import view.game.Game;
+import view.game.board.Board;
 import view.main.Menu;
 
 import javax.swing.*;
 
 public class GUI extends JFrame {
-    private Menu menu;
-    private Board board;
+    private final Menu menu;
+    private final Game game;
 
     public GUI(){
         this.menu = new Menu();
-        this.board = new Board();
+        this.game = new Game();
     }
 
     public void init(){
@@ -23,15 +24,19 @@ public class GUI extends JFrame {
         this.menu.setVisible(true);
     }
 
-    public void showBoard(){
-        this.board.setVisible(true);
+    public void showBoard(Player playerOne, Player playerTwo){
+        if (playerOne == null) playerOne = new Player();
+        if (playerTwo == null) playerTwo = new Player();
+
+        this.game.setPlayers(playerOne, playerTwo);
+        this.game.setVisible(true);
     }
 
     public Menu getMenu(){
         return this.menu;
     }
 
-    public Board getBoard(){
-        return this.board;
+    public Game getGame(){
+        return this.game;
     }
 }

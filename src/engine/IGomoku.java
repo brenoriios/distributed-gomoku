@@ -11,10 +11,11 @@ public interface IGomoku extends Remote {
 
     void createBoard() throws RemoteException;
     void startGame() throws RemoteException;
-    boolean gameStarted() throws RemoteException;
+    boolean isGameStarted() throws RemoteException;
 
     boolean placePiece(Player player, int x, int y) throws RemoteException;
     void switchPlayer() throws RemoteException;
+    Player getOpponent(String playerId) throws RemoteException;
     String getCurrentPlayer() throws RemoteException;
 
     String[][] getBoard() throws RemoteException;

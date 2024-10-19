@@ -1,45 +1,31 @@
 package engine;
 
 import env.Env;
-import view.board.Board;
 import javax.swing.event.SwingPropertyChangeSupport;
 import java.beans.PropertyChangeListener;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Date;
 
 public class Client {
     private SwingPropertyChangeSupport propChangeFirer;
 
-   private Player player;
-   private IGomoku stub;
+    private Player player;
+    private IGomoku stub;
 
-   public Client() {
-       propChangeFirer = new SwingPropertyChangeSupport(this);
-   }
-
-    public void setStub(IGomoku stub) {
-        IGomoku oldStub = this.stub;
-        this.stub = stub;
-        propChangeFirer.firePropertyChange("stub", oldStub, stub);
-    }
-
-    public void addListener(PropertyChangeListener property) {
-        propChangeFirer.addPropertyChangeListener(property);
-    }
+    public Client() {}
 
     public void connect(String name){
           try{
              Registry registry = LocateRegistry.getRegistry(Env.hostAddress);
-             stub = (IGomoku)registry.lookup(Env.serverName);
-             player = stub.enterGame(name);
-          } catch (Exception ex) {}
+             this.stub = (IGomoku)registry.lookup(Env.serverName);
+             this.player = this.stub.enterGame(name);
+          } catch (Exception _) {}
     }
 
     public String[][] getBoard(){
         try{
             return this.stub.getBoard();
-        } catch (Exception ex) {}
+        } catch (Exception _) {}
 
         return null;
     }
@@ -47,6 +33,42 @@ public class Client {
    public void placePiece(int x, int y){
       try {
          this.stub.placePiece(this.player, x, y);
-      } catch (Exception e) {}
+      } catch (Exception _) {}
+   }
+
+   public Player getPlayer(){
+        return this.player;
+   }
+
+   public Player getOpponent(){
+       try {
+           return this.stub.getOpponent(this.player.getId());
+       } catch (Exception _) {}
+
+       return new Player();
+   }
+
+   public String getCurrentPlayer(){
+       try {
+            return this.stub.getCurrentPlayer();
+       } catch (Exception _) {}
+
+       return "";
+   }
+
+   public String getWinner(){
+       try {
+           return this.stub.getWinner();
+       } catch (Exception _) {}
+
+       return "";
+   }
+
+   public boolean isGameStarted(){
+        try {
+           return this.stub.isGameStarted();
+        } catch (Exception _) {}
+
+        return false;
    }
 }
