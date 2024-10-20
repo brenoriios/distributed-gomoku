@@ -1,3 +1,5 @@
+import engine.Gomoku;
+import engine.IGomoku;
 import env.Env;
 
 import java.rmi.registry.LocateRegistry;

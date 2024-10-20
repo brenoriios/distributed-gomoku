@@ -1,9 +1,16 @@
+package engine;
+
 import java.io.Serializable;
 
 public class Player implements Serializable  {
     private String id;
     private String name;
     private String pieceColor;
+
+    public Player(){
+        this.id = "";
+        this.name = "";
+    }
 
     public Player(String id, String name){
         this.id = id;

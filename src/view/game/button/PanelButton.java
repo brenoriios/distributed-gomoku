@@ -1,4 +1,4 @@
-package view.board.button;
+package view.game.button;
 
 import javax.swing.*;
 import java.awt.*;

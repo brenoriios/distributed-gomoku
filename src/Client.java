@@ -1,102 +1,97 @@
-import env.Env;
-import view.board.Board;
+import engine.ClientEngine;
+import engine.IGomoku;
+import view.GUI;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.Date;
 import java.util.Objects;
 
 public class Client {
-   static Player player;
-   static Board board;
-   static IGomoku stub;
+    private String currentPlayer;
+    private final GUI gui;
+    private final ClientEngine engine;
 
-   private Client(String host) {
-//      try{
-//         Registry registry = LocateRegistry.getRegistry(host);
-//         stub = (IGomoku)registry.lookup(Env.serverName);
-//         board = new Board();
-//      } catch (Exception ex) {}
-   }
+    private Thread updater;
 
-   public static void main(String[] args) {
-      String host = args.length < 1 ? null : args[0];
+    public Client(GUI gui, ClientEngine engine){
+        this.gui = gui;
+        this.engine = engine;
 
-      try {
-         Registry registry = LocateRegistry.getRegistry(host);
-         stub = (IGomoku)registry.lookup(Env.serverName);
+        this.setupMenuListeners();
+        this.setupBoardListeners();
+    }
 
-         player = stub.enterGame(new Date().toString());
-
-         do {
-            System.out.println("Aguardando início do jogo");
-         } while (!stub.gameStarted());
-
-         board = new Board();
-
-         for(int x = 0; x < IGomoku.width; x++){
-            for(int y = 0; y < IGomoku.height; y++) {
-               int finalX = x;
-               int finalY = y;
-               board.buttons[x][y].addActionListener(e -> {
-                  placePiece(finalX, finalY);
-               });
+    public void setupMenuListeners() {
+        this.gui.getMenu().getConnectButton().addActionListener(_ -> {
+            if(this.engine.connect(this.gui.getMenu().getPlayerName())){
+                this.gui.getMenu().next();
+                this.checkGameStartedThread();
             }
-         }
+        });
+    }
 
-         while (true){
-            Thread.sleep(1000);
-            board.update(stub.getBoard());
-
-            if (stub.getWinner() != null){
-               System.out.println("Vencedor " + stub.getWinner());
-               board.quit();
+    public void setupBoardListeners(){
+        for(int row = 0; row < IGomoku.maxCols; row++){
+            for(int col = 0; col < IGomoku.maxRows; col++) {
+                int finalRow = row;
+                int finalCol = col;
+                this.gui.getGame().getBoard().getButtons()[row][col].addActionListener(_ -> {
+                    System.out.println("row: " + finalRow + " | col: " + finalCol);
+                    this.engine.placePiece(finalRow, finalCol);
+                });
             }
-         }
+        }
+    }
 
-//         gameLoop(stub);
-      } catch (Exception ex) {
-         System.err.println("Client exception: " + ex);
-         System.err.println("Stack trace: ");
-         ex.printStackTrace();
-      }
-   }
+    public void checkGameStartedThread(){
+        new Thread(() -> {
+            boolean gameStarted;
+            do {
+                gameStarted = this.engine.isGameStarted();
+            } while (!gameStarted);
 
-   public static void placePiece(int x, int y){
-      try {
-         stub.placePiece(player, x, y);
-         board.update(stub.getBoard());
-      } catch (Exception e) {}
-   }
+            startUpdaterThread();
+            this.gui.showBoard(this.engine.getPlayer(), this.engine.getOpponent());
+        }).start();
+    }
 
-   public static void gameLoop(IGomoku stub) {
-      try {
-          do {
-              while (!Objects.equals(stub.getCurrentPlayer(), player.getId())) {
-                  System.out.flush();
-                  System.out.println("Não é sua vez");
-              }
+    public void startUpdaterThread(){
+        this.updater = new Thread(() -> {
+            try {
+                while (true){
+                    Thread.sleep(1000);
+                    updateBoard();
+                }
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
-              printBoard(stub.getBoard());
-              System.out.println("Faça sua jogada: ");
-              String[] coords = System.console().readLine().split(",");
-              int x = Integer.parseInt(coords[0]);
-              int y = Integer.parseInt(coords[1]);
+        updater.start();
+    }
 
-              stub.placePiece(player, x, y);
-          } while (stub.getWinner() == null);
-         stub.destroy();
-      } catch (Exception ex) {
-         // Erro
-      }
-   }
+    public void updateBoard(){
+        String winner = this.engine.getWinner();
+        if (!Objects.equals(winner, ""))  {
+            this.gui.showWinner(winner);
+            this.updater.interrupt();
+            return;
+        }
 
-   public static void printBoard(String[][] board){
-      for (int x = 0; x < board.length - 1; x++){
-         for (int y = 0; y < board[0].length - 1; y++){
-            System.out.print(board[x][y]);
-         }
-         System.out.println();
-      }
-   }
+        String newCurrentPlayer = this.engine.getCurrentPlayer();
+        if (!Objects.equals(this.currentPlayer, newCurrentPlayer)){
+            this.currentPlayer = newCurrentPlayer;
+            this.gui.getGame().updateGame(engine.getBoard(), engine.getCurrentPlayer());
+        }
+    }
+
+    public void run(){
+        this.gui.init();
+    }
+
+    public static void main(String[] args) {
+        GUI ui = new GUI();
+        ClientEngine cl = new ClientEngine();
+        Client ct = new Client(ui, cl);
+
+        ct.run();
+    }
 }
