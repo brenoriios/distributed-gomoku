@@ -17,11 +17,7 @@ public class PanelButton extends JPanel {
         this.add(this.innerButton, BorderLayout.CENTER);
     }
 
-    public PanelButton(BufferedImage background) {
-        this(background, new Dimension(50, 50));
-    }
-
-    public Button getButton(){
+    public Button getButton() {
         return this.innerButton;
     }
 

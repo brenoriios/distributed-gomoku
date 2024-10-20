@@ -8,10 +8,9 @@ public class Client {
     private String currentPlayer;
     private final GUI gui;
     private final ClientEngine engine;
+    private volatile boolean observerEnabled = false;
 
-    private Thread updater;
-
-    public Client(GUI gui, ClientEngine engine){
+    public Client(GUI gui, ClientEngine engine) {
         this.gui = gui;
         this.engine = engine;
 
@@ -21,16 +20,16 @@ public class Client {
 
     public void setupMenuListeners() {
         this.gui.getMenu().getConnectButton().addActionListener(_ -> {
-            if(this.engine.connect(this.gui.getMenu().getPlayerName())){
+            if (this.engine.connect(this.gui.getMenu().getPlayerName())) {
                 this.gui.getMenu().next();
                 this.checkGameStartedThread();
             }
         });
     }
 
-    public void setupBoardListeners(){
-        for(int row = 0; row < IGomoku.maxCols; row++){
-            for(int col = 0; col < IGomoku.maxRows; col++) {
+    public void setupBoardListeners() {
+        for (int row = 0; row < IGomoku.maxCols; row++) {
+            for (int col = 0; col < IGomoku.maxRows; col++) {
                 int finalRow = row;
                 int finalCol = col;
                 this.gui.getGame().getBoard().getButtons()[row][col].addActionListener(_ -> {
@@ -41,49 +40,47 @@ public class Client {
         }
     }
 
-    public void checkGameStartedThread(){
+    public void checkGameStartedThread() {
         new Thread(() -> {
             boolean gameStarted;
             do {
                 gameStarted = this.engine.isGameStarted();
             } while (!gameStarted);
 
-            startUpdaterThread();
+            startObserver();
             this.gui.showBoard(this.engine.getPlayer(), this.engine.getOpponent());
         }).start();
     }
 
-    public void startUpdaterThread(){
-        this.updater = new Thread(() -> {
+    public void startObserver() {
+        new Thread(() -> {
             try {
-                while (true){
+                while (this.observerEnabled) {
                     Thread.sleep(1000);
                     updateBoard();
                 }
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
-
-        updater.start();
+        }).start();
     }
 
-    public void updateBoard(){
+    public void updateBoard() {
         String winner = this.engine.getWinner();
-        if (!Objects.equals(winner, ""))  {
+        if (!Objects.equals(winner, "")) {
             this.gui.showWinner(winner);
-            this.updater.interrupt();
+            this.observerEnabled = false;
             return;
         }
 
         String newCurrentPlayer = this.engine.getCurrentPlayer();
-        if (!Objects.equals(this.currentPlayer, newCurrentPlayer)){
+        if (!Objects.equals(this.currentPlayer, newCurrentPlayer)) {
             this.currentPlayer = newCurrentPlayer;
             this.gui.getGame().updateGame(engine.getBoard(), engine.getCurrentPlayer());
         }
     }
 
-    public void run(){
+    public void run() {
         this.gui.init();
     }
 

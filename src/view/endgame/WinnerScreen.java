@@ -23,7 +23,7 @@ public class WinnerScreen extends JFrame {
         content.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         JLabel title = new JLabel("FIM DE JOGO", SwingConstants.CENTER);
-        title.setBorder(BorderFactory.createEmptyBorder(0,0,30,0));
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
         title.setFont(new Font("Orbitron", Font.BOLD, 48));
         JLabel label = new JLabel("Vencedor:", SwingConstants.CENTER);
         label.setFont(new Font("Orbitron", Font.PLAIN, 24));

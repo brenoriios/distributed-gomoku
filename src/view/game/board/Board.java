@@ -1,8 +1,6 @@
 package view.game.board;
 
-import engine.Player;
 import env.Env;
-import utils.Utils;
 import view.game.button.Button;
 import view.game.button.PanelButton;
 

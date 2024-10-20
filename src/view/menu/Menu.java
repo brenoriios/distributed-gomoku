@@ -11,7 +11,7 @@ public class Menu extends JFrame {
     private final JPanel content;
     private final CardLayout contentLayout;
 
-    public Menu(){
+    public Menu() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MenuContentPane contentPane = new MenuContentPane();
         contentPane.setLayout(new GridBagLayout());
@@ -35,7 +35,7 @@ public class Menu extends JFrame {
         this.pack();
     }
 
-    private JPanel createConnectSection(){
+    private JPanel createConnectSection() {
         JLabel startGameLabel = new JLabel("Digite o seu nome:", SwingConstants.CENTER);
         this.nameInput = new JTextField(20);
         this.connect = new JButton("Conectar");
@@ -43,7 +43,7 @@ public class Menu extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
 
         JPanel connectPanel = new JPanel();
-        connectPanel.setBackground(new Color(0,0,0,0));
+        connectPanel.setBackground(new Color(0, 0, 0, 0));
         connectPanel.setLayout(new GridBagLayout());
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -62,15 +62,15 @@ public class Menu extends JFrame {
         return connectPanel;
     }
 
-    public void next(){
+    public void next() {
         this.contentLayout.next(this.content);
     }
 
-    public String getPlayerName(){
+    public String getPlayerName() {
         return this.nameInput.getText();
     }
 
-    public JButton getConnectButton(){
+    public JButton getConnectButton() {
         return this.connect;
     }
 }
