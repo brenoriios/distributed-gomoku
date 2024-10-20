@@ -4,8 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface IGomoku extends Remote {
-    int height = 15;
-    int width = 15;
+    int maxRows = 15;
+    int maxCols = 15;
 
     Player enterGame(String name) throws RemoteException;
 
@@ -13,19 +13,19 @@ public interface IGomoku extends Remote {
     void startGame() throws RemoteException;
     boolean isGameStarted() throws RemoteException;
 
-    boolean placePiece(Player player, int x, int y) throws RemoteException;
+    void placePiece(Player player, int row, int col) throws RemoteException;
     void switchPlayer() throws RemoteException;
     Player getOpponent(String playerId) throws RemoteException;
     String getCurrentPlayer() throws RemoteException;
 
     String[][] getBoard() throws RemoteException;
 
-    boolean checkValidPosition(int x, int y) throws RemoteException;
+    boolean checkValidPosition(int row, int col) throws RemoteException;
     String getWinner() throws RemoteException;
 
-    void destroy() throws RemoteException;
-    boolean scoredOnHorizontal(Player player, int x, int y) throws RemoteException;
-    boolean scoredOnVertical(Player player, int x, int y) throws RemoteException;
-    boolean scoredOnDiagonalFromLeft(Player player, int x, int y) throws RemoteException;
-    boolean scoredOnDiagonalFromRight(Player player, int x, int y) throws RemoteException;
+    void restart() throws RemoteException;
+    boolean scoredOnHorizontal(Player player, int row, int col) throws RemoteException;
+    boolean scoredOnVertical(Player player, int row, int col) throws RemoteException;
+    boolean scoredFromTopLeftToBottomRight(Player player, int row, int col) throws RemoteException;
+    boolean scoredFromTopRightToBottomLeft(Player player, int row, int col) throws RemoteException;
 }

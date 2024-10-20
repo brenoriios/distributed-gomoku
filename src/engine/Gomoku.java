@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Gomoku implements IGomoku{
-    private final String[][] board = new String[width][height];
+    private final String[][] board = new String[maxRows][maxCols];
     private boolean gameStarted = false;
     private Player playerOne;
     private Player playerTwo;
@@ -41,9 +41,9 @@ public class Gomoku implements IGomoku{
 
     @Override
     public void createBoard() throws RemoteException {
-        for (int x = 0; x < this.board.length - 1; x++){
-            for (int y = 0; y < this.board[0].length - 1; y++){
-                this.board[x][y] = Env.emptyCell;
+        for (int row = 0; row < maxCols; row++){
+            for (int col = 0; col < maxRows; col++){
+                this.board[row][col] = Env.emptyCell;
             }
         }
     }
@@ -73,26 +73,24 @@ public class Gomoku implements IGomoku{
     }
 
     @Override
-    public boolean placePiece(Player player, int x, int y) throws RemoteException {
-        if (!Objects.equals(player.getId(), this.currentPlayer)) return false;
-        if (!checkValidPosition(x, y)) return false;
+    public void placePiece(Player player, int row, int col) throws RemoteException {
+        if (!Objects.equals(player.getId(), this.currentPlayer)) return;
+        if (!checkValidPosition(row, col)) return;
 
-        System.out.println("Jogador " + player.getName() + " fez sua jogada");
-        this.board[x][y] = player.getPieceColor();
+        System.out.println(player.getId() + " fez sua jogada");
+        this.board[row][col] = player.getPieceColor();
 
         if (
-            this.scoredOnHorizontal(player, x, y) ||
-            this.scoredOnVertical(player, x, y) ||
-            this.scoredOnDiagonalFromLeft(player, x, y) ||
-            this.scoredOnDiagonalFromRight(player, x, y)
+            this.scoredOnHorizontal(player, row, col) ||
+            this.scoredOnVertical(player, row, col) ||
+            this.scoredFromTopLeftToBottomRight(player, row, col) ||
+            this.scoredFromTopRightToBottomLeft(player, row, col)
         ) {
             this.winner = player.getName();
-            return true;
         }
 
         this.switchPlayer();
         System.out.println("Vez do " + currentPlayer);
-        return true;
     }
 
     @Override
@@ -123,8 +121,10 @@ public class Gomoku implements IGomoku{
     }
 
     @Override
-    public boolean checkValidPosition(int x, int y) throws RemoteException {
-        return Objects.equals(this.board[x][y], Env.emptyCell);
+    public boolean checkValidPosition(int row, int col) throws RemoteException {
+        if (row >= maxRows || col >= maxCols) return false;
+
+        return Objects.equals(this.board[row][col], Env.emptyCell);
     }
 
     @Override
@@ -133,79 +133,94 @@ public class Gomoku implements IGomoku{
     }
 
     @Override
-    public void destroy() throws RemoteException {
+    public void restart() throws RemoteException {
         this.gameStarted = false;
-        this.playerOne = null;
-        this.playerTwo = null;
-        this.winner = null;
+        this.currentPlayer = "";
+        this.winner = "";
+        this.createBoard();
     }
 
     @Override
-    public boolean scoredOnHorizontal(Player player, int x, int y) throws RemoteException {
-        int dx = x;
-        // b b b b b
-        while (dx >= 0 && Objects.equals(this.board[dx][y], player.getPieceColor())){
-            dx -= 1;
+    public boolean scoredOnHorizontal(Player player, int row, int col) throws RemoteException {
+        int count = 0;
+        int auxCol = col;
+
+        while (auxCol >= 0 && Objects.equals(this.board[row][auxCol], player.getPieceColor())){
+            auxCol--;
+            count++;
         }
 
-        int pieceCount = 0;
-        for(int i = 1; i <= 5; i++){
-            if (!Objects.equals(this.board[dx + i][y], player.getPieceColor())) break;
-            pieceCount++;
+        auxCol = ++col;
+        while (auxCol < maxCols && Objects.equals(this.board[row][auxCol], player.getPieceColor())){
+            auxCol++;
+            count++;
         }
 
-        return pieceCount >= 5;
+        return count >= 5;
     }
 
     @Override
-    public boolean scoredOnVertical(Player player, int x, int y) throws RemoteException {
-        int dy = y;
-        while (dy >= 0 && Objects.equals(this.board[x][dy], player.getPieceColor())){
-            dy -= 1;
+    public boolean scoredOnVertical(Player player, int row, int col) throws RemoteException {
+        int count = 0;
+        int auxRow = row;
+
+        while (auxRow >= 0 && Objects.equals(this.board[auxRow][col], player.getPieceColor())){
+            auxRow--;
+            count++;
         }
 
-        int pieceCount = 0;
-        for(int i = 1; i <= 5; i++){
-            if (!Objects.equals(this.board[x][dy + i], player.getPieceColor())) break;
-            pieceCount++;
+        auxRow = ++row;
+        while (auxRow < maxRows && Objects.equals(this.board[auxRow][col], player.getPieceColor())){
+            auxRow++;
+            count++;
         }
 
-        return pieceCount >= 5;
+        return count >= 5;
     }
 
     @Override
-    public boolean scoredOnDiagonalFromLeft(Player player, int x, int y) throws RemoteException {
-        int dx = x;
-        int dy = y;
-        while ((dx >= 0 && dy >= 0) && Objects.equals(this.board[dx][dy], player.getPieceColor())){
-            dx -= 1;
-            dy -= 1;
+    public boolean scoredFromTopLeftToBottomRight(Player player, int row, int col) throws RemoteException {
+        int count = 0;
+        int auxRow = row;
+        int auxCol = col;
+
+        while (auxRow >= 0 && auxCol >= 0 && Objects.equals(this.board[auxRow][auxCol], player.getPieceColor())){
+            count++;
+            auxRow--;
+            auxCol--;
         }
 
-        int pieceCount = 0;
-        for(int i = 1; i <= 5; i++){
-            if (!Objects.equals(this.board[dx + i][dy + i], player.getPieceColor())) break;
-            pieceCount++;
+        auxRow = ++row;
+        auxCol = ++col;
+        while (auxRow < maxRows && auxCol < maxCols && Objects.equals(this.board[auxRow][auxCol], player.getPieceColor())){
+            count++;
+            auxRow++;
+            auxCol++;
         }
 
-        return pieceCount >= 5;
+        return count >= 5;
     }
 
     @Override
-    public boolean scoredOnDiagonalFromRight(Player player, int x, int y) throws RemoteException {
-        int dx = x;
-        int dy = y;
-        while ((dx >= 0 && dy >= 0) && Objects.equals(this.board[dx][dy], player.getPieceColor())){
-            dx += 1;
-            dy += 1;
+    public boolean scoredFromTopRightToBottomLeft(Player player, int row, int col) throws RemoteException {
+        int count = 0;
+        int auxRow = row;
+        int auxCol = col;
+
+        while (auxRow >= 0 && auxCol < maxCols && Objects.equals(this.board[auxRow][auxCol], player.getPieceColor())){
+            count++;
+            auxRow--;
+            auxCol++;
         }
 
-        int pieceCount = 0;
-        for(int i = 1; i <= 5; i++){
-            if (!Objects.equals(this.board[dx - i][dy - i], player.getPieceColor())) break;
-            pieceCount++;
+        auxRow = ++row;
+        auxCol = --col;
+        while (auxRow < maxRows && auxCol >= 0 && Objects.equals(this.board[auxRow][auxCol], player.getPieceColor())){
+            count++;
+            auxRow++;
+            auxCol--;
         }
 
-        return pieceCount >= 5;
+        return count >= 5;
     }
 }

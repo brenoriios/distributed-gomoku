@@ -11,8 +11,6 @@ public class PanelButton extends JPanel {
     public PanelButton(BufferedImage background, Dimension size) {
         this.setLayout(new BorderLayout());
         this.background = background;
-        this.setOpaque(false);
-        this.setBackground(new Color(0,0,0,0));
         this.setPreferredSize(size);
 
         this.innerButton = new Button();

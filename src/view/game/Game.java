@@ -13,6 +13,7 @@ public class Game extends JFrame {
     public Topbar topbar;
 
     public Game(){
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         this.board = new Board();
         this.topbar = new Topbar();

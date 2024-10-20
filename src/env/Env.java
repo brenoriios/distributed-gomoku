@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Env {
-   public static final String serverName = "engine.Server";
+   public static final String serverName = "engine.server";
    public static final String hostAddress = "";
    public static final int serverPort = 1099;
 
@@ -21,13 +21,14 @@ public abstract class Env {
    public static final String blackPiecePath = "red_piece.png";
    public static final String cellBackgroundPath = "cross.png";
    public static final String versusPath = "versus.png";
-   public static final String customFontPath = "orbitron.ttf";
 
    public static BufferedImage menuBg = Utils.loadImage(menuBgPath);
+
    public static BufferedImage whitePiece = Utils.loadImage(whitePiecePath);
    public static BufferedImage blackPiece = Utils.loadImage(blackPiecePath);
    public static BufferedImage cellBackground = Utils.loadImage(cellBackgroundPath);
    public static BufferedImage versus = Utils.loadImage(versusPath);
 
+   public static final String customFontPath = "orbitron.ttf";
    public static Font customFont = Utils.loadFont(customFontPath);
 }

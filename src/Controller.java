@@ -29,12 +29,13 @@ public class Controller {
     }
 
     public void setupBoardListeners(){
-        for(int x = 0; x < IGomoku.width; x++){
-            for(int y = 0; y < IGomoku.height; y++) {
-                int finalX = x;
-                int finalY = y;
-                this.view.getGame().getBoard().getButtons()[x][y].addActionListener(_ -> {
-                    this.model.placePiece(finalX, finalY);
+        for(int row = 0; row < IGomoku.maxCols; row++){
+            for(int col = 0; col < IGomoku.maxRows; col++) {
+                int finalRow = row;
+                int finalCol = col;
+                this.view.getGame().getBoard().getButtons()[row][col].addActionListener(_ -> {
+                    System.out.println("row: " + finalRow + " | col: " + finalCol);
+                    this.model.placePiece(finalRow, finalCol);
                 });
             }
         }
@@ -67,9 +68,8 @@ public class Controller {
 
     public void updateBoard(){
         String winner = this.model.getWinner();
-        System.out.println(winner);
         if (!Objects.equals(winner, ""))  {
-//            this.view.showWinner(winner);
+            this.view.showWinner(winner);
             this.updater.interrupt();
             return;
         }

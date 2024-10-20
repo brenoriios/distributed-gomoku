@@ -60,10 +60,4 @@ public class Board extends JPanel {
     public Button[][] getButtons() {
         return this.buttons;
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Env.menuBg, 0, 0, this.getWidth(), this.getHeight(), this);
-    }
 }

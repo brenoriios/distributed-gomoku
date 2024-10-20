@@ -34,10 +34,10 @@ public class Client {
         return null;
     }
 
-   public void placePiece(int x, int y){
-      try {
-         this.stub.placePiece(this.player, x, y);
-      } catch (Exception _) {}
+   public void placePiece(int row, int col){
+        try {
+            this.stub.placePiece(this.player, row, col);
+        } catch (Exception _) {}
    }
 
    public Player getPlayer(){

@@ -9,6 +9,7 @@ public class WinnerScreen extends JFrame {
     private final JLabel winner;
 
     public WinnerScreen() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(Env.customFont);
 
         WinnerScreenContentPane contentPane = new WinnerScreenContentPane();
