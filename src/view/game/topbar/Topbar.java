@@ -28,10 +28,10 @@ public class Topbar extends JPanel {
     }
 
     public Icon getPieceColorResourceImage(String pieceColor) {
-        BufferedImage image = Env.blackPiece;
+        BufferedImage image = Env.greenPiece;
 
         if (Objects.equals(pieceColor, Env.pieceWhite)) {
-            image = Env.whitePiece;
+            image = Env.redPiece;
         }
 
         return new ImageIcon(image);

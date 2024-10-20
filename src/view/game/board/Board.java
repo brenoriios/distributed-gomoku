@@ -40,11 +40,11 @@ public class Board extends JPanel {
         BufferedImage image = null;
 
         if (Objects.equals(pieceColor, Env.pieceBlack)) {
-            image = Env.blackPiece;
+            image = Env.greenPiece;
         }
 
         if (Objects.equals(pieceColor, Env.pieceWhite)) {
-            image = Env.whitePiece;
+            image = Env.redPiece;
         }
 
         if (image == null || Objects.equals(pieceColor, Env.emptyCell)) {
