@@ -14,7 +14,6 @@ public class Board extends JPanel {
 
     public Board() {
         this.setLayout(new GridLayout(15, 15));
-        this.setBackground(Color.black);
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
@@ -57,5 +56,13 @@ public class Board extends JPanel {
 
     public Button[][] getButtons() {
         return this.buttons;
+    }
+
+    public static void main(String[] args) {
+        JFrame f = new JFrame();
+        Board b = new Board();
+        f.add(b);
+        f.pack();
+        f.setVisible(true);
     }
 }

@@ -53,6 +53,7 @@ public class Client {
     }
 
     public void startObserver() {
+        this.observerEnabled = true;
         new Thread(() -> {
             try {
                 while (this.observerEnabled) {
