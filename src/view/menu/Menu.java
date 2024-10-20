@@ -13,6 +13,7 @@ public class Menu extends JFrame {
 
     public Menu() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         MenuContentPane contentPane = new MenuContentPane();
         contentPane.setLayout(new GridBagLayout());
         this.setContentPane(contentPane);

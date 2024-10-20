@@ -14,6 +14,7 @@ public class Game extends JFrame {
 
     public Game() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         this.board = new Board();
         this.topbar = new Topbar();

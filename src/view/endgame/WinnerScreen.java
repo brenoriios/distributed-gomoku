@@ -10,6 +10,7 @@ public class WinnerScreen extends JFrame {
 
     public WinnerScreen() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(ClientResources.customFont);
 
         WinnerScreenContentPane contentPane = new WinnerScreenContentPane();
