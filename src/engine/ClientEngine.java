@@ -1,6 +1,6 @@
 package engine;
 
-import env.Env;
+import env.Common;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -14,8 +14,8 @@ public class ClientEngine {
 
     public boolean connect(String name) {
         try {
-            Registry registry = LocateRegistry.getRegistry(Env.hostAddress);
-            this.stub = (IGomoku) registry.lookup(Env.serverName);
+            Registry registry = LocateRegistry.getRegistry(Common.hostAddress);
+            this.stub = (IGomoku) registry.lookup(Common.serverName);
             this.player = this.stub.enterGame(name);
 
             return true;

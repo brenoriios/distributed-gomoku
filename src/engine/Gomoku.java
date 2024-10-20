@@ -1,6 +1,6 @@
 package engine;
 
-import env.Env;
+import env.Common;
 
 import java.rmi.RemoteException;
 import java.util.Objects;
@@ -27,10 +27,10 @@ public class Gomoku implements IGomoku {
         Player newPlayer = new Player(id, name);
 
         if (playerOne == null) {
-            newPlayer.setPieceColor(Env.pieceBlack);
+            newPlayer.setPieceColor(Common.pieceBlack);
             this.playerOne = newPlayer;
         } else {
-            newPlayer.setPieceColor(Env.pieceWhite);
+            newPlayer.setPieceColor(Common.pieceWhite);
             this.playerTwo = newPlayer;
         }
 
@@ -43,7 +43,7 @@ public class Gomoku implements IGomoku {
     public void createBoard() throws RemoteException {
         for (int row = 0; row < maxCols; row++) {
             for (int col = 0; col < maxRows; col++) {
-                this.board[row][col] = Env.emptyCell;
+                this.board[row][col] = Common.emptyCell;
             }
         }
     }
@@ -124,7 +124,7 @@ public class Gomoku implements IGomoku {
     public boolean checkValidPosition(int row, int col) throws RemoteException {
         if (row >= maxRows || col >= maxCols) return false;
 
-        return Objects.equals(this.board[row][col], Env.emptyCell);
+        return Objects.equals(this.board[row][col], Common.emptyCell);
     }
 
     @Override

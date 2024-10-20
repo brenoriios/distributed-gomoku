@@ -1,6 +1,6 @@
 package view.endgame;
 
-import env.Env;
+import env.ClientResources;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ public class WinnerScreen extends JFrame {
 
     public WinnerScreen() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(Env.customFont);
+        GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(ClientResources.customFont);
 
         WinnerScreenContentPane contentPane = new WinnerScreenContentPane();
         contentPane.setLayout(new GridBagLayout());
@@ -53,6 +53,6 @@ class WinnerScreenContentPane extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Env.menuBg, 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(ClientResources.menuBg, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 }

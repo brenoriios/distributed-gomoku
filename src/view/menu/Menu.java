@@ -1,6 +1,6 @@
 package view.menu;
 
-import env.Env;
+import env.ClientResources;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,6 +83,6 @@ class MenuContentPane extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Env.menuBg, 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(ClientResources.menuBg, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 }

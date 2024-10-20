@@ -5,19 +5,11 @@ import utils.Utils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Env {
-    public static final String serverName = "engine.server";
-    public static final String hostAddress = "192.168.15.12";
-    public static final int serverPort = 1099;
+public abstract class ClientResources {
+    public static final String menuBgPath = "background.png";
 
-    public static final String pieceWhite = " W ";
-    public static final String pieceBlack = " B ";
-    public static final String emptyCell = " E ";
-
-    public static final String menuBgPath = "menu_bg.png";
-
-    public static final String redPiecePath = "red.png";
-    public static final String greenPiecePath = "red.png";
+    public static final String redPiecePath = "black.png";
+    public static final String greenPiecePath = "white.png";
     public static final String cellBackgroundPath = "empty_cell.png";
     public static final String versusPath = "versus.png";
 

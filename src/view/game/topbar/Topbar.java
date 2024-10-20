@@ -1,7 +1,8 @@
 package view.game.topbar;
 
 import engine.Player;
-import env.Env;
+import env.ClientResources;
+import env.Common;
 import view.game.topbar.playercard.PlayerCard;
 
 import javax.swing.*;
@@ -14,10 +15,10 @@ public class Topbar extends JPanel {
     private final PlayerCard playerTwoCard;
 
     public Topbar() {
-        this.setBackground(Color.black);
+        this.setBackground(new Color(79, 34, 0));
 
         JLabel versusImage = new JLabel();
-        versusImage.setIcon(new ImageIcon(Env.versus));
+        versusImage.setIcon(new ImageIcon(ClientResources.versus));
         versusImage.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         this.playerOneCard = new PlayerCard();
         this.playerTwoCard = new PlayerCard();
@@ -28,10 +29,10 @@ public class Topbar extends JPanel {
     }
 
     public Icon getPieceColorResourceImage(String pieceColor) {
-        BufferedImage image = Env.greenPiece;
+        BufferedImage image = ClientResources.greenPiece;
 
-        if (Objects.equals(pieceColor, Env.pieceWhite)) {
-            image = Env.redPiece;
+        if (Objects.equals(pieceColor, Common.pieceWhite)) {
+            image = ClientResources.redPiece;
         }
 
         return new ImageIcon(image);
