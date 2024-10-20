@@ -2,17 +2,14 @@ package engine;
 
 import env.Env;
 import javax.swing.event.SwingPropertyChangeSupport;
-import java.beans.PropertyChangeListener;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class Client {
-    private SwingPropertyChangeSupport propChangeFirer;
-
+public class ClientEngine {
     private Player player;
     private IGomoku stub;
 
-    public Client() {}
+    public ClientEngine() {}
 
     public boolean connect(String name){
           try{
@@ -21,7 +18,9 @@ public class Client {
              this.player = this.stub.enterGame(name);
 
              return true;
-          } catch (Exception _) {}
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
 
           return false;
     }
@@ -29,7 +28,9 @@ public class Client {
     public String[][] getBoard(){
         try{
             return this.stub.getBoard();
-        } catch (Exception _) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -37,7 +38,9 @@ public class Client {
    public void placePiece(int row, int col){
         try {
             this.stub.placePiece(this.player, row, col);
-        } catch (Exception _) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
    }
 
    public Player getPlayer(){
@@ -47,7 +50,9 @@ public class Client {
    public Player getOpponent(){
        try {
            return this.stub.getOpponent(this.player.getId());
-       } catch (Exception _) {}
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
 
        return new Player();
    }
@@ -55,7 +60,9 @@ public class Client {
    public String getCurrentPlayer(){
        try {
             return this.stub.getCurrentPlayer();
-       } catch (Exception _) {}
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
 
        return "";
    }
@@ -63,7 +70,9 @@ public class Client {
    public String getWinner(){
        try {
            return this.stub.getWinner();
-       } catch (Exception _) {}
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
 
        return "";
    }
@@ -71,7 +80,9 @@ public class Client {
    public boolean isGameStarted(){
         try {
            return this.stub.isGameStarted();
-        } catch (Exception _) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
    }

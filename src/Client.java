@@ -1,28 +1,28 @@
-import engine.Client;
+import engine.ClientEngine;
 import engine.IGomoku;
 import view.GUI;
 
 import java.util.Objects;
 
-public class Controller {
+public class Client {
     private String currentPlayer;
-    private final GUI view;
-    private final Client model;
+    private final GUI gui;
+    private final ClientEngine engine;
 
     private Thread updater;
 
-    public Controller(GUI view, Client model){
-        this.view = view;
-        this.model = model;
+    public Client(GUI gui, ClientEngine engine){
+        this.gui = gui;
+        this.engine = engine;
 
         this.setupMenuListeners();
         this.setupBoardListeners();
     }
 
     public void setupMenuListeners() {
-        this.view.getMenu().getConnectButton().addActionListener(_ -> {
-            if(this.model.connect(this.view.getMenu().getPlayerName())){
-                this.view.getMenu().next();
+        this.gui.getMenu().getConnectButton().addActionListener(_ -> {
+            if(this.engine.connect(this.gui.getMenu().getPlayerName())){
+                this.gui.getMenu().next();
                 this.checkGameStartedThread();
             }
         });
@@ -33,9 +33,9 @@ public class Controller {
             for(int col = 0; col < IGomoku.maxRows; col++) {
                 int finalRow = row;
                 int finalCol = col;
-                this.view.getGame().getBoard().getButtons()[row][col].addActionListener(_ -> {
+                this.gui.getGame().getBoard().getButtons()[row][col].addActionListener(_ -> {
                     System.out.println("row: " + finalRow + " | col: " + finalCol);
-                    this.model.placePiece(finalRow, finalCol);
+                    this.engine.placePiece(finalRow, finalCol);
                 });
             }
         }
@@ -45,11 +45,11 @@ public class Controller {
         new Thread(() -> {
             boolean gameStarted;
             do {
-                gameStarted = this.model.isGameStarted();
+                gameStarted = this.engine.isGameStarted();
             } while (!gameStarted);
 
             startUpdaterThread();
-            this.view.showBoard(this.model.getPlayer(), this.model.getOpponent());
+            this.gui.showBoard(this.engine.getPlayer(), this.engine.getOpponent());
         }).start();
     }
 
@@ -60,35 +60,37 @@ public class Controller {
                     Thread.sleep(1000);
                     updateBoard();
                 }
-            } catch(InterruptedException _) {}
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
         updater.start();
     }
 
     public void updateBoard(){
-        String winner = this.model.getWinner();
+        String winner = this.engine.getWinner();
         if (!Objects.equals(winner, ""))  {
-            this.view.showWinner(winner);
+            this.gui.showWinner(winner);
             this.updater.interrupt();
             return;
         }
 
-        String newCurrentPlayer = this.model.getCurrentPlayer();
+        String newCurrentPlayer = this.engine.getCurrentPlayer();
         if (!Objects.equals(this.currentPlayer, newCurrentPlayer)){
             this.currentPlayer = newCurrentPlayer;
-            this.view.getGame().updateGame(model.getBoard(), model.getCurrentPlayer());
+            this.gui.getGame().updateGame(engine.getBoard(), engine.getCurrentPlayer());
         }
     }
 
     public void run(){
-        this.view.init();
+        this.gui.init();
     }
 
     public static void main(String[] args) {
         GUI ui = new GUI();
-        Client cl = new Client();
-        Controller ct = new Controller(ui, cl);
+        ClientEngine cl = new ClientEngine();
+        Client ct = new Client(ui, cl);
 
         ct.run();
     }
