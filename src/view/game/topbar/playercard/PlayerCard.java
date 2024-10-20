@@ -7,9 +7,9 @@ public class PlayerCard extends JPanel {
     PlayerInfo playerInfo;
     JLabel statusLabel;
 
-    public PlayerCard(){
+    public PlayerCard() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBackground(new Color(0,0,0,0));
+        this.setBackground(new Color(0, 0, 0, 0));
 
         this.playerInfo = new PlayerInfo();
         this.statusLabel = new JLabel();
@@ -19,11 +19,11 @@ public class PlayerCard extends JPanel {
         this.add(statusLabel);
     }
 
-    public void updatePlayerInfo(Icon pieceColor, String name){
+    public void updatePlayerInfo(Icon pieceColor, String name) {
         this.playerInfo.updatePlayerInfo(pieceColor, name);
     }
 
-    public void updateStatus(String text){
+    public void updateStatus(String text) {
         this.statusLabel.setText(text);
     }
 }
@@ -32,8 +32,8 @@ class PlayerInfo extends JPanel {
     JLabel pieceColor;
     JLabel playerName;
 
-    public PlayerInfo(){
-        this.setBackground(new Color(0,0,0,0));
+    public PlayerInfo() {
+        this.setBackground(new Color(0, 0, 0, 0));
         this.pieceColor = new JLabel();
         this.playerName = new JLabel();
 
@@ -43,7 +43,7 @@ class PlayerInfo extends JPanel {
         this.add(this.playerName);
     }
 
-    public void updatePlayerInfo(Icon icon, String name){
+    public void updatePlayerInfo(Icon icon, String name) {
         this.pieceColor.setIcon(icon);
         this.playerName.setText(name);
     }

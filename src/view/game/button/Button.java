@@ -7,27 +7,30 @@ import java.awt.event.MouseListener;
 
 public class Button extends JButton implements MouseListener {
 
-    public Button(Dimension size){
+    public Button(Dimension size) {
         setOpaque(false);
         this.setPreferredSize(size);
         this.setBackground(new Color(0, 0, 0, 0));
-        this.setBorder(BorderFactory.createMatteBorder(0,0,0,0, new Color(0,0,0,0)));
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, new Color(0, 0, 0, 0)));
 
         addMouseListener(this);
     }
 
-    public Button(){
+    public Button() {
         this(new Dimension(25, 25));
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {  }
+    public void mouseClicked(MouseEvent e) {
+    }
 
     @Override
-    public void mousePressed(MouseEvent e) {  }
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {
@@ -36,6 +39,6 @@ public class Button extends JButton implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        this.setBorder(BorderFactory.createMatteBorder(0,0,0,0, new Color(0,0,0,0)));
+        this.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, new Color(0, 0, 0, 0)));
     }
 }
